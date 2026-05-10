@@ -116,7 +116,7 @@ STATIC_URL = '/static/'
 if DEBUG:
     STATICFILES_DIRS = [BASE_DIR / "static"]
 else:
-    STATIC_ROOT = BASE_DIR / "staticfiles"
+    STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
@@ -164,4 +164,3 @@ MULTI_CAPTCHA_ADMIN = {
     'engine': 'recaptcha2',
 }
 CAPTCHA_LENGTH=6
-
