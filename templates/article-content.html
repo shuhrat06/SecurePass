@@ -1,0 +1,207 @@
+{% extends 'user-base.html' %}
+{% load static %}
+
+{% block TITLE %}SecurePass | {{ article.title }}{% endblock %}
+{% block articles_active %}active{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="container py-3">
+        <div class="row g-4">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'articles' %}" class="text-decoration-none">Maqolalar</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ article.title|truncatechars:50 }}</li>
+                    </ol>
+                </nav>
+
+                <!-- Title -->
+                <div class="mb-4 text-center">
+                    <h1 class="display-5 fw-bold mb-3">{{ article.title }}</h1>
+                    <p class="lead text-muted">{{ article.intro }}</p>
+                </div>
+
+                <!-- Cover Image with Category Badge -->
+                <div class="position-relative rounded-4 overflow-hidden mb-4 shadow-lg">
+                    <img {% if article.cover %} src="{{ article.cover.url }}" {% else %} src="{% static 'img/default_cover.png' %}" {% endif %} 
+                         class="img-fluid w-100" style="max-height: 500px; object-fit: cover;" alt="{{ article.title }}">
+                    <div class="position-absolute top-0 end-0 m-3">
+                        <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">
+                            <i class="bi bi-tag me-1"></i> {{ article.category.name }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Article Meta Info -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-5 p-3 bg-light rounded-3">
+                    <div class="d-flex flex-wrap gap-4">
+                        <span class="text-muted">
+                            <i class="bi bi-clock fs-5 me-2 text-primary"></i>
+                            {{ article.read_time_minute }} daqiqa o'qiladi
+                        </span>
+                        <span class="text-muted">
+                            &nbsp;&nbsp;<i class="bi bi-eye fs-5 me-2 text-primary"></i>
+                            {{ article.str_views }} ko'rish
+                        </span>
+                        <span class="text-muted">
+                            &nbsp;&nbsp;<i class="bi bi-chat-dots fs-5 me-2 text-primary"></i>
+                            {{ article.comment_count }} izoh
+                        </span>
+                        <span class="text-muted">
+                            &nbsp;&nbsp;<i class="bi bi-calendar fs-5 me-2 text-primary"></i>
+                            {{ article.created_at|date:"H:i | d.m.Y" }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Article Content -->
+                <div class="article-content mb-5">
+                    {% for content in contents %}
+                        {% if content.text %}
+                            <div class="mb-4">
+                                <p class="lead" style="font-size: 1.1rem; line-height: 1.8;">
+                                    {{ content.text|linebreaks }}
+                                </p>
+                            </div>
+                        {% else %}
+                            <div class="row justify-content-center my-4">
+                                <div class="col-10">
+                                    <div class="rounded-4 overflow-hidden shadow-sm">
+                                        <img src="{{ content.image.url }}" class="img-fluid w-100" alt="Article image">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Author Section -->
+                <div class="bg-gradient-light rounded-4 p-4 mb-5 text-center">
+                    <div class="d-flex justify-content-center align-items-center gap-3">
+                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="bi bi-person-fill text-white fs-1"></i>
+                        </div>
+                        <div>
+                            <span class="text-muted">Muallif</span>
+                            <h5 class="mb-0 fw-bold">{{ article.author.get_full_name|default:article.author.username }}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="bg-light rounded-4 p-4 mb-4" id="comments">
+                    <h4 class="mb-4 fw-bold">
+                        <i class="bi bi-chat-dots me-2 text-primary"></i>
+                        Izohlar ({{ article.comment_count }})
+                    </h4>
+
+                    {% if comments %}
+                        {% for comment in comments %}
+                        <div class="bg-white rounded-3 p-4 mb-3 shadow-sm hover-shadow">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">
+                                        <i class="bi bi-person-circle me-1 text-primary"></i>
+                                        {{ comment.author.get_full_name|default:comment.author.username }}
+                                    </h6>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar me-1"></i>
+                                    {{ comment.created_at|date:"H:i, d.m.Y" }}
+                                </small>
+                            </div>
+                            <p class="mb-0 text-secondary">{{ comment.text }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="bg-white rounded-3 p-4 text-center">
+                            <i class="bi bi-chat fs-1 text-muted"></i>
+                            <p class="mt-2 mb-0">Hozircha izohlar yo'q. Birinchi izoh qoldiring!</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Add Comment Form -->
+                <div class="bg-gradient-light rounded-4 p-4">
+                    <h4 class="mb-4 fw-bold">
+                        <i class="bi bi-pencil-square me-2 text-primary"></i>
+                        Izoh qoldiring
+                    </h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <textarea class="form-control rounded-3" name="text" rows="4" 
+                                          placeholder="Izohingizni shu yerga yozing..." minlength="1" required></textarea>
+                            </div>
+                            <div class="col-12" style="margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5">
+                                    <i class="bi bi-send me-2"></i>
+                                    Yuborish
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-1"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-light {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+    
+    .hover-shadow:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .article-content p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #2d3748;
+    }
+    
+    .breadcrumb-item a {
+        color: #667eea;
+        transition: color 0.3s ease;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #764ba2;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    @media (max-width: 768px) {
+        .display-5 {
+            font-size: 1.8rem;
+        }
+        
+        .d-flex.flex-wrap.gap-4 {
+            gap: 0.75rem !important;
+        }
+        
+        .article-content p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+    }
+</style>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+{% endblock %}

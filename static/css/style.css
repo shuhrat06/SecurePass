@@ -1,0 +1,287 @@
+:root{
+    --bg:#0b1220;
+    --card:#111827;
+    --card-2:#0f172a;
+
+    --primary:#2563eb;
+    --primary-hover:#1d4ed8;
+
+    --success:#16a34a;
+    --danger:#dc2626;
+
+    --text:#ffffff;
+    --text-soft:#cbd5e1;
+
+    --border:#1f2937;
+}
+
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Inter","Segoe UI",sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: #ffffff;
+    position: relative;
+    overflow-x: hidden;
+    font-size: larger;
+}
+
+/* GIF background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url("/static/background.gif") center/cover no-repeat;
+    z-index: -2;
+}
+
+/* Dark overlay */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 10, 20, 0.75); /* kontrast uchun */
+    backdrop-filter: blur(4px);
+    z-index: -1;
+}
+
+/* HEADER */
+/* HEADER */
+header {
+    position: fixed;        /* Navbarni scrollda qotiradi */
+    top: 0;                 /* Ekranning yuqori qismida */
+    left: 0;
+    width: 100%;            /* Butun ekran bo‘ylab */
+    z-index: 1000;          /* Boshqa elementlardan oldinda turishi uchun */
+    background: #0f172a;    /* Hozirgi rang bilan bir xil */
+    border-bottom: 1px solid #1f2937;
+    padding: 1.5rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+/* NAV LIST */
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:3rem;
+    padding:0;
+    margin:0;
+}
+
+/* NAV LINKS */
+nav a{
+    position:relative;
+    text-decoration:none;
+    font-size:1.15rem;     /* kattaroq */
+    font-weight:600;
+    color:#ffffff;         /* yorqin */
+    letter-spacing:.5px;
+    padding:.3rem 0;
+    transition:.3s ease;
+}
+
+/* Glow underline */
+nav a::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-6px;
+    width:0;
+    height:3px;
+    border-radius:3px;
+    background:linear-gradient(90deg,#2563eb,#3b82f6,#60a5fa);
+    transition:.3s ease;
+}
+
+/* Hover effect */
+nav a:hover{
+    color:#60a5fa;
+    text-shadow:0 0 8px rgba(96,165,250,.6);
+}
+
+nav a:hover::after{
+    width:100%;
+}
+
+/* MAIN */
+main{
+    max-width:1000px;
+    margin:8rem auto;
+    padding:0 1.5rem;
+}
+
+h1{
+    font-size:2.5rem;
+    margin-bottom:1rem;
+    font-weight:700;
+    color:#ffffff;
+}
+
+p{
+    color:var(--text-soft);
+}
+
+/* CARD */
+article{
+    margin-top:3rem;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:2.5rem;
+    box-shadow:0 15px 40px rgba(0,0,0,.5);
+}
+
+/* FORM */
+fieldset{
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:1.5rem;
+    margin-top:1.5rem;
+}
+
+legend{
+    color:#ffffff;
+    font-weight:600;
+    padding:0 .5rem;
+}
+
+label{
+    display:block;
+    margin-bottom:.5rem;
+    font-size:.9rem;
+    color:var(--text-soft);
+}
+
+/* IMPORTANT FIX */
+/* type password va text bir xil ko'rinishda */
+input[type="number"],
+input[type="password"],
+input[type="text"]{
+    width:100%;
+    height:48px;               /* qat'iy balandlik */
+    padding:0 1rem;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#0f172a;
+    color:#ffffff;
+    font-size:1rem;
+    transition:.2s;
+}
+
+input:focus{
+    outline:none;
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(37,99,235,.3);
+}
+
+input[type="checkbox"]{
+    accent-color:var(--primary);
+}
+
+/* PASSWORD FIELD */
+.password-field{
+    display:flex;
+    gap:.5rem;
+    align-items:center;
+}
+
+.password-field input{
+    flex:1;
+}
+
+/* EYE BUTTON */
+.eye-btn{
+    height:48px;          /* input bilan bir xil */
+    width:48px;
+    margin-top: 0px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#0f172a;
+    color:#ffffff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.eye-btn:hover{
+    background:var(--primary);
+    border-color:var(--primary);
+}
+
+/* BUTTON */
+button{
+    margin-top:1.5rem;
+    padding:.9rem 1.8rem;
+    border-radius:12px;
+    border:none;
+    font-weight:600;
+    font-size:1rem;
+    cursor:pointer;
+    background:var(--primary);
+    color:#ffffff;
+    transition:.2s;
+}
+
+button:hover{
+    background:var(--primary-hover);
+}
+
+/* RESULT */
+/* Container */
+.result{
+    position: relative;        /* stacking context yaratadi */
+    margin-top:1.8rem;
+    padding:1.2rem;
+    border-radius:12px;
+    font-family:monospace;
+    font-size:18px;
+    word-break:break-all;
+
+    /* Solid background */
+    background: var(--b_color);
+    color:white;
+
+    overflow:hidden;
+}
+
+/* Text layer ustida turishi uchun */
+.result .text{
+    position: relative;    /* text pseudo-element yoki background ustida turadi */
+    z-index: 1;            /* background ustida */
+}
+.generated_password{
+    margin-top:1.8rem;
+    padding:1.2rem;
+    background:#0f172a;
+    border:1px solid var(--border);
+    border-radius:12px;
+    font-family:monospace;
+    font-size:18px;
+    color:white;
+    word-break:break-all;
+}
+
+.generated_password,
+.result span {
+    font-weight: bold;
+}
+
+/* FOOTER */
+footer{
+    margin-top:4rem;
+    padding:2rem;
+    text-align:center;
+    color:var(--text-soft);
+    border-top:1px solid var(--border);
+}

@@ -1,0 +1,71 @@
+/* 404 sahifa uchun qo'shimcha stillar */
+.w3l-error-block {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.page {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+.brand-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+}
+
+.w3l-error-grid h1 {
+    font-size: 8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.w3l-error-grid h2 {
+    font-size: 2rem;
+    color: white;
+    margin: 1rem 0;
+}
+
+.error-description {
+    color: rgba(255,255,255,0.8);
+    max-width: 500px;
+    margin: 1rem auto;
+}
+
+.return-btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.return-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+    .w3l-error-grid h1 {
+        font-size: 5rem;
+    }
+    
+    .w3l-error-grid h2 {
+        font-size: 1.5rem;
+    }
+}

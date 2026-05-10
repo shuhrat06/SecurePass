@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tizimga kirish</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #222;
+    }
+
+    .login-box {
+      position: relative;
+      background-color: #fff;
+      padding: 60px 65px;
+      background-color: #fff;
+      padding: 60px 65px;
+      /* ichki bo'shliq biroz kattaroq */
+      border: 1px solid #e5e5e5;
+      border-radius: 18px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+      width: 100%;
+      max-width: 460px;
+      /* ilgari 380 edi — endi 460 */
+      transition: all 0.3s ease;
+    }
+
+    .login-box:hover {
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 16px;
+      /* biroz kattaroq input */
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      background-color: #fff;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    button {
+      background-color: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 0;
+      font-size: 1.05rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.25s ease, transform 0.2s ease;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+      transform: translateY(-2px);
+    }
+
+    .extra-links {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .extra-links a {
+      color: #007aff;
+      text-decoration: none;
+    }
+
+    .extra-links a:hover {
+      text-decoration: underline;
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .login-footer a {
+      color: #007aff;
+      text-decoration: none;
+      font-weight: 500;
+      margin-left: 5px;
+    }
+
+    .login-footer a:hover {
+      color: #005fcc;
+      text-decoration: underline;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      font-size: 0.95rem;
+      color: #007aff;
+      cursor: pointer;
+
+      padding: 6px 10px;
+      border-radius: 8px;
+
+      transition: all 0.2s ease;
+    }
+
+    .back-link a {
+      text-decoration: none;
+      color: #007aff;
+    }
+
+    .back-link:hover {
+      background-color: rgba(0, 122, 255, 0.08);
+    }
+
+    .back-link:active {
+      transform: scale(0.96);
+    }
+
+    /* ========== NOTIFICATION TOAST ========== */
+    .notification-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+
+      background: #fff;
+      color: #222;
+
+      border-radius: 12px;
+      padding: 14px 18px;
+
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+      transform: translateX(1000px);
+      transition: transform 0.3s ease;
+
+      min-width: 260px;
+    }
+
+    .notification-toast.show {
+      transform: translateX(0);
+    }
+
+    .toast-success {
+      border-left: 4px solid #28a745;
+    }
+
+    .toast-error {
+      border-left: 4px solid #007aff;
+    }
+
+    @media (max-width: 550px) {
+      .login-box {
+        padding: 40px 30px;
+        border-radius: 14px;
+        max-width: 90%;
+      }
+
+      .login-box h2 {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <div class="back-link">
+      <i class="fa-solid fa-house"></i>
+      <a href="{% url 'home' %}">Asosiy sahifa</a>
+    </div>
+    <h2>Ro'yhatdan o'tish</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="first_name">Ism:</label>
+        <input type="text" id="first_name" name="first_name" placeholder="Ismingiz..." value="{{ first_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label for="last_name">Familiya:</label>
+        <input type="text" id="last_name" name="last_name" placeholder="Familiyangiz..." value="{{ last_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Email..." value="{{ email|default:'' }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Foydalanuvchi nomi (login):</label>
+        <input type="text" id="username" name="username" placeholder="Foydalanuvchi nomi..." value="{{ username|default:'' }}" required>
+      </div>
+      <div class="form-group">
+        <label for="password">
+          <i>Tavsiya qilinadigan parol:</i> <br>&nbsp;&nbsp;&nbsp;&nbsp;
+          <span style="color: green;">{{ recomended_pass }}</span>
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="password">Parol:</label>
+        <input type="password" id="password" name="password" placeholder="Parol..." required>
+      </div>
+      <div class="form-group">
+        <label for="password_confirm">Parolni qayta kiriting:</label>
+        <input type="password" id="password_confirm" name="password1" placeholder="Parol..." required>
+      </div>
+
+      <button type="submit">Ro'yhatdan o'tish</button>
+    </form>
+    <p class="login-footer">
+      Avval ro'yhatdan o'tganmisiz? <a href="{% url 'login' %}">Kirish</a>
+    </p>
+  </div>
+  {% if messages %}
+  <div class="notification-toast show 
+      {% if message.tags == 'error' %}toast-error
+      {% elif message.tags == 'success' %}toast-success{% endif %}">
+    {% for message in messages %}
+    <div class="toast-content">
+      <i class="fa-solid 
+          {% if message.tags == 'error' %}fa-circle-exclamation
+          {% elif message.tags == 'success' %}fa-circle-check{% endif %}">
+      </i>
+      <span>{{ message }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const notifications = document.querySelectorAll('.notification-toast');
+
+      notifications.forEach((toast, index) => {
+        setTimeout(() => {
+          toast.classList.add('show');
+        }, index * 200); // ketma-ket chiqadi
+
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000 + index * 200);
+      });
+    });
+  </script>
+
+</body>
+
+</html>

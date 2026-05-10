@@ -1,0 +1,170 @@
+{% extends 'user-base.html' %}
+{% load static %}
+
+{% block TITLE %}SecurePass | Parollar{% endblock %}
+{% block header_name %}Parollar{% endblock %}
+{% block home_active %}active{% endblock %}
+
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+
+<div class="col-md-12">
+  <div class="card card-dark">
+    <div class="card-header border-0">
+      <button class="btn btn-primary" data-toggle="modal" data-target="#AddProduct"
+        style="margin-right: 30px;">
+        <i class="fa-solid fa-plus"></i>
+        Parol qo'shish
+      </button>
+    </div>
+
+    <div class="card-body">
+      <!-- Responsiv table wrapper -->
+      <div style="overflow-x: auto; width: 100%;">
+        <table class="table" style="text-align: center; min-width: 600px;">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 15px">№</th>
+              <th scope="col" style="text-align: center;">Tizim</th>
+              <th scope="col" style="text-align: center;">URL</th>
+              <th scope="col" style="text-align: center;">Username</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for password in passwords %}
+            <tr>
+              <td style="vertical-align: middle;">{{ forloop.counter }}</td>
+              <td style="vertical-align: middle; word-break: break-word;">
+                {% if password.icon and password.icon.url %}
+                <img src="{{ password.icon.url }}" alt="icon"
+                  style="width: 40px; height: 20px; margin-right: 8px; vertical-align: middle;">
+                {% else %}
+                <img src="{% static 'default_icon.png' %}" alt="icon"
+                  style="width: 25px; height: 20px; margin-right: 8px; vertical-align: middle;">
+                {% endif %}
+                <a href="{% url 'password-info' password.id %}" style="vertical-align: middle;" target="_blank">{{ password.title }}</a>
+              </td>
+              <td style="vertical-align: middle; word-break: break-all;">
+                <a href="{{ password.url }}" target="_blank" style="word-break: break-all;">{{ password.url }}</a>
+              </td>
+              <td style="vertical-align: middle; word-break: break-word;">{{ password.username }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="AddProduct">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-dark">
+        <h4 class="modal-title">Yangi Parol</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <form id="new-product-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-body">
+          <label for="title">Tizim:</label>
+          <input type="text" name="title" placeholder="Hemis, Gmail..." id="title" class="form-control"
+            required>
+          <br>
+          <label for="icon">Icon:</label>
+          <input type="file" name="icon" id="icon" class="form-control">
+          <i>Icon hajmi 5mb dan kichik bo'lishi shart!</i>
+          <br>
+          <label for="url">URL:</label>
+          <input type="text" name="url" placeholder="https://student.fstu.uz/" id="url" class="form-control">
+          <br>
+          <label for="username">Foydalanuvchi nomi:</label>
+          <input type="text" name="username" placeholder="login..." id="username" class="form-control"
+            required>
+          <br>
+          <label for="password">Parol:</label>
+          <input type="text" name="password" placeholder="parol..." id="password" class="form-control"
+            required>
+          <br>
+          <label for="note">Izoh:</label>
+          <textarea name="note" id="note" class="form-control" rows="2"></textarea>
+          <br>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Qo`shish</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Bekor qilish</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- Kichik ekranlar uchun responsiv stillar (asl stillar o'zgarmaydi) -->
+<style>
+  /* Faqat kichik ekranlar uchun responsiv moslashuv */
+  @media (max-width: 768px) {
+    /* Table kataklaridagi shriftlarni biroz kichraytirish */
+    .table td, .table th {
+      font-size: 0.85rem;
+      padding: 0.5rem;
+    }
+    
+    /* Tizim ustunidagi link shrifti */
+    .table td a {
+      font-size: 0.85rem;
+    }
+    
+    /* Tugmaga ozgina moslashuv */
+    .card-header .btn {
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+    }
+    
+    /* Modal dialog kichik ekranga moslashuvi */
+    .modal-dialog {
+      margin: 0.5rem;
+      max-width: calc(100% - 1rem);
+    }
+    
+    .modal-body {
+      padding: 1rem;
+    }
+    
+    /* Input va label shriftlari */
+    .modal-body label, .modal-body input, .modal-body textarea, .modal-body i {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    /* Juda kichik ekranlar uchun yanada kichikroq shrift */
+    .table td, .table th {
+      font-size: 0.75rem;
+      padding: 0.4rem;
+    }
+    
+    .table td a {
+      font-size: 0.75rem;
+    }
+    
+    .card-header .btn {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.6rem;
+    }
+    
+    /* Icon rasmlarini biroz kichraytirish */
+    .table td img {
+      transform: scale(0.9);
+    }
+  }
+</style>
+<!-- ./wrapper -->
+{% endblock %}

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO Platform - Vazifalaringizni boshqaring</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/home_style.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const resultDiv = document.querySelector('.generated_password');
+            if (resultDiv) {
+                resultDiv.title = "Click for copy!";
+                resultDiv.addEventListener('click', function () {
+                    const text = this.innerText.replace('Generated Password: ', '');
+                    navigator.clipboard.writeText(text);
+                    const originalText = this.innerText;
+                    this.innerText = "✅ Copied!";
+                    setTimeout(() => { this.innerText = originalText; }, 1500);
+                });
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Secure<span class="text-primary">Pass</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Bosh sahifa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://t.me/shuhratrozimatov">Aloqa</a>
+                    </li>
+                </ul>
+                <div class="d-flex ms-lg-3">
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Kirish</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span class="fs-4 fw-bold">SecurePass</span>
+                    </div>
+                    <p class="text-muted">Parollaringiz ishonchli qo'llarda!</p>
+                    <div class="social-links">
+                        <a href="https://t.me/shuhratrozimatov"><i class="bi bi-telegram"></i></a>
+                        <a href="https://www.youtube.com/@binary06"><i class="bi bi-youtube"></i></a>
+                        <a href="https://github.com/shuhrat06"><i class="bi bi-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Mahsulot</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#password">ParolGeneratsiya</a></li>
+                        <li><a href="#password">ParolTekshirish</a></li>
+                        <li><a href="https://globalnews.pythonanywhere.com/" target="_blank">Yangiliklar</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Kompaniya</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://t.me/ruzmatovs_blog">Biz haqimizda</a></li>
+                        <li><a href="https://t.me/ruzmatovs_blog">Blog</a></li>
+                        <li><a href="https://t.me/ruzmatovs_blog">Karyera</a></li>
+                        <li><a href="https://t.me/shuhratrozimatov">Aloqa</a></li>
+                    </ul>
+                </div>
+                <form class="col-lg-4 mb-4" method="post" id="contactForm" action="#">
+                    {% csrf_token %}
+                    <h5>Yangiliklarga obuna bo'ling</h5>
+                    <p class="text-muted">Eng so'nggi yangiliklardan xabardor bo'ling</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Email manzilingiz" name="email" required>
+                        <button class="btn btn-primary" type="submit">Obuna</button>
+                    </div>
+                </form>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col text-center">
+                    <p class="text-muted mb-0">&copy; AX 641-23, Ro'zimatov Shuhratjon</p>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <!-- Template -->
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="notification-toast {% if message.tags == 'error' %}toast-error{% elif message.tags == 'success' %}toast-success{% endif %}"
+        id="ContactNotification">
+        <div class="toast-content">
+            <i class="bi 
+                    {% if message.tags == 'error' %}bi-exclamation-circle-fill
+                    {% elif message.tags == 'success' %}bi-check-circle-fill
+                    {% endif %} me-2">
+            </i>
+            <span>{{ message }}</span>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <button id="backToTop" class="back-to-top" title="Yuqoriga chiqish">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript (Form yuborilganda notification chiqishi uchun) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Faqat kontakt formasi mavjud bo'lgan sahifada ishlash
+            const contactForm = document.querySelector('form[id^="contactForm"]'); // id="contactForm" yoki "contactForm1"
+            const contactForm1 = document.querySelector('form[id^="contactForm1"]'); // id="contactForm" yoki "contactForm1"
+            const notification = document.getElementById('ContactNotification');
+
+            if ((contactForm && notification) || (contactForm1 && notification)) {
+                // Django errors bo'lsa, notificationni ko'rsatish
+
+                {% if messages %}
+                showNotification();
+                {% endif %}
+                // Yopish tugmasi
+                const closeBtn = document.querySelector('.notification-close');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function () {
+                        hideNotification();
+                    });
+                }
+            }
+        });
+
+        function showNotification() {
+            const notification = document.getElementById('ContactNotification');
+            if (!notification) return;
+
+            notification.classList.add('show');
+
+            setTimeout(function () {
+                hideNotification();
+            }, 3000);
+        }
+
+        function hideNotification() {
+            const notification = document.getElementById('ContactNotification');
+            if (!notification) return;
+
+            notification.classList.remove('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const backToTopButton = document.getElementById('backToTop');
+
+            // Scroll hodisasini kuzatish
+            window.addEventListener('scroll', function () {
+                if (window.pageYOffset > 300) {  // 300px dan pastga tushganda
+                    backToTopButton.style.display = 'flex';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+
+            // Tugma bosilganda yuqoriga chiqish
+            backToTopButton.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'  // Silliq harakat
+                });
+            });
+        });
+        function togglePassword(btn) {
+            const input = document.getElementById("password");
+            const icon = btn.querySelector("i"); // button ichidagi <i> elementini olish
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash"); // yashirin ikonaga almashtirish
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye"); // ko‘rish ikonaga qaytarish
+            }
+        }
+    </script>
+
+</body>
+
+</html>

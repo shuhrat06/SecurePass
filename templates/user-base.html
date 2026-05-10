@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{% block TITLE %}{% endblock %}</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+    /* Container page yuqorisida o'ng burchakda */
+    .messages-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1050;
+      /* toast dan yuqori */
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Har bir alert box */
+    .message-box {
+      overflow: hidden;
+      padding-bottom: 0.5rem;
+      min-width: 250px;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Border animatsiyasi */
+    .message-border {
+      height: 4px;
+      background-color: rgba(0, 0, 0, 0.2);
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transition: width 4s linear;
+    }
+
+    .bg-gradient-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .btn-gradient-success {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      border: none;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .btn-gradient-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(67, 233, 123, 0.3);
+      color: white;
+    }
+
+    .icon-circle-white {
+      width: 70px;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    @media (max-width: 576px) {
+      .card-body {
+        padding: 1.5rem !important;
+      }
+
+      .btn-gradient-success {
+        font-size: 14px;
+      }
+
+      .form-control-lg {
+        font-size: 14px;
+      }
+    }
+
+    /* ===== KICHIK EKRANLAR UCHUN QO'SHIMCHA RESPONSIVE STILLAR ===== */
+    /* Faqat mobil qurilmalar uchun moslashuv - asl stillar buzilmaydi */
+    @media (max-width: 768px) {
+
+      /* Kichik ekranda navbar menyusini yaxshiroq ko'rsatish */
+      .main-header .navbar-nav .nav-item.d-none.d-sm-inline-block {
+        display: inline-block !important;
+      }
+
+      /* Kichik ekranda navbar linklarini o'rash va shriftni kichikroq qilish */
+      .main-header .navbar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-width: 80%;
+      }
+
+      .main-header .navbar-nav .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      /* Sidebar toggle tugmasi uchun joy */
+      .main-header .navbar-nav:first-child {
+        margin-right: auto;
+      }
+
+      /* Content wrapper responsivligi */
+      .content-wrapper {
+        overflow-x: auto;
+      }
+
+      /* Breadcrumb mobil uchun */
+      .content-header .container-fluid .row {
+        flex-direction: column;
+      }
+
+      .content-header .col-sm-6 {
+        width: 100%;
+        text-align: center;
+      }
+
+      .breadcrumb {
+        justify-content: center;
+      }
+
+      /* Message box mobil uchun */
+      .messages-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+      }
+
+      .message-box {
+        min-width: auto;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Juda kichik ekranlar (telefon portret) */
+    @media (max-width: 480px) {
+      .main-header .navbar-nav .nav-link {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.75rem;
+      }
+
+      .brand-text {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <!-- Sidebar toggle tugmasi - mobil uchun -->
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+            <i class="fas fa-bars"></i>
+          </a>
+        </li>
+
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url 'user-home' %}" class="nav-link">Asosiy</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url 'password-generator' %}" class="nav-link">ParolGeneratsiya</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url 'password-checker' %}" class="nav-link">ParolniTekshirish</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url 'articles' %}" class="nav-link">FoydaliMa'lumotlar</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url 'user-messages' %}" class="nav-link">Xabarlar</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url 'user-account' %}" class="nav-link">MeningHisobim</a>
+        </li>
+      </ul>
+
+      <!-- Right navbar links -->
+      <ul class="navbar-nav ml-auto">
+        <!-- Navbar Search -->
+      </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="{% url 'user-home' %}" class="brand-link align-items-center"
+        style="display: flex; align-items: center; text-decoration: none; gap: 8px;">
+        <i class="fa-solid fa-shield-halved brand-image img-circle elevation-3"
+          style="opacity: .8; color: rgb(88, 104, 249);"></i>
+        <span class="brand-text font-weight-light">SecurePass</span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
+
+          <!-- USER IMAGE OR ICON -->
+          <div class="me-2">
+            {% if request.user.profile.image %}
+            <img src="{{ request.user.profile.image.url }}" class="img-circle elevation-2"
+              style="width:35px; height:35px; object-fit:cover; border-radius:50%;">
+            {% else %}
+            <i class="fa-solid fa-user" style="color: rgb(59, 255, 205); font-size: 22px;"></i>
+            {% endif %}
+          </div>
+
+          <!-- USER NAME -->
+          <div class="info">
+            <a href="{% url 'user-account' %}" class="d-block">
+              {{ request.user.get_full_name|default:request.user.username }}
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+            <li class="nav-item">
+              <a href="{% url 'user-home' %}" class="nav-link {% block home_active %}{% endblock %}">
+                <i class="fa-solid fa-key" style="color: rgb(116, 192, 252);"></i>
+                <p>Parollar</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'password-generator' %}" class="nav-link {% block gen_pass_active %}{% endblock %}">
+                <i class="fa-solid fa-key" style="color: rgb(116, 192, 252);"></i>
+                <p>Parol generatsiya qilish</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="{% url 'password-checker' %}" class="nav-link {% block check_pass_active %}{% endblock %}">
+                <i class="fa-solid fa-square-check" style="color: rgb(168, 207, 64);"></i>
+                <p>Parolni tekshirish</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="{% url 'articles' %}" class="nav-link {% block doc_pass_active %}{% endblock %}">
+                <i class="fa-solid fa-swatchbook" style="color: rgb(79, 204, 99);"></i>
+                <p>Foydali ma'lumotlar</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="{% url 'user-messages' %}" class="nav-link {% block msgs_active %}{% endblock %}"
+                style="position: relative;">
+                <i class="fa-solid fa-comment-dots" style="color: rgb(76, 29, 229);"></i>
+                <p style="display: inline;">Xabarlar</p>
+                {% if unread_count %}
+                <span class="badge bg-danger" style="position: absolute; top: 5px; right: 10px; border-radius: 50%;">
+                  {{ unread_count }}
+                </span>
+                {% endif %}
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">{% block header_name %}{% endblock %}</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{% url 'logout' %}">Tizimdan chiqish</a></li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      {% block content %}
+      {% endblock %}
+    </div>
+
+    <!-- REQUIRED SCRIPTS -->
+    {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} position-relative message-box" role="alert">
+        {{ message }}
+        <div class="message-border"></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- jQuery -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- AdminLTE -->
+    <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="{% static 'plugins/chart.js/Chart.min.j' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'dist/js/demo.j' %}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{% static 'dist/js/pages/dashboard3.j' %}"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const messages = document.querySelectorAll(".message-box");
+        messages.forEach(function (msg) {
+          const border = msg.querySelector(".message-border");
+
+          // kichik kechikish bilan border kamayadi
+          setTimeout(function () {
+            border.style.width = "0";
+          }, 100);
+
+          // border kamaygandan keyin xabar yo'q bo'ladi
+          setTimeout(function () {
+            msg.style.display = "none";
+          }, 4100);
+        });
+      });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,307 @@
+{% extends 'user-base.html' %}
+{% load static %}
+
+{% block TITLE %}SecurePass | {{request.user.username}}{% endblock %}
+{% block header_name %}Foydalanuvchi hisobi{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-12">
+
+            <!-- USER INFO CARD - Modern Design -->
+            <div class="card border-0 shadow-lg rounded-4 mb-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="row align-items-center">
+                        <!-- USER PHOTO with status indicator -->
+                        <div class="col-md-3 mb-4 mb-md-0 text-center">
+                            <div class="position-relative d-inline-block">
+                                {% if request.user.photo %}
+                                <img src="{{ request.user.photo.url }}" 
+                                     class="rounded-circle img-fluid border border-4 border-white shadow-sm"
+                                     style="width: 130px; height: 130px; object-fit: cover;">
+                                {% else %}
+                                <img src="{% static 'user-solid-full.svg' %}" 
+                                     class="rounded-circle img-fluid border border-4 border-white shadow-sm"
+                                     style="width: 130px; height: 130px; object-fit: cover;">
+                                {% endif %}
+                                <span class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-3 border-white" 
+                                      style="width: 20px; height: 20px;"></span>
+                            </div>
+                        </div>
+
+                        <!-- USER INFO with glass effect -->
+                        <div class="col-md-6 text-white">
+                            <h2 class="fw-bold mb-2">{{ request.user.username }}</h2>
+                            <div class="d-flex flex-wrap gap-3 mb-2">
+                                <span class="badge bg-white text-dark bg-opacity-25 px-3 py-2 rounded-pill">
+                                    <i class="fas fa-user me-1"></i>
+                                    {{ request.user.first_name|default:'Ism kiritilmagan' }}
+                                </span>
+                                <span class="badge bg-white text-dark bg-opacity-25 px-3 py-2 rounded-pill">
+                                    <i class="fas fa-user me-1"></i>
+                                    {{ request.user.last_name|default:'Familiya kiritilmagan' }}
+                                </span>
+                            </div>
+                            <p class="mb-0">
+                                <i class="fas fa-envelope me-2"></i>
+                                {{ request.user.email }}
+                            </p>
+                            <small class="text-white-50">A'zo bo'lgan: {{ request.user.date_joined|date:"d.m.Y" }}</small>
+                        </div>
+
+                        <!-- ACTION BUTTON -->
+                        <div class="col-md-3 mt-4 mt-md-0 text-center text-md-end">
+                            <button class="btn btn-light btn-lg px-4 rounded-pill shadow-sm" data-toggle="modal" data-target="#editUser">
+                                <i class="fas fa-edit me-2"></i> Tahrirlash
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSWORD CHANGE SECTION - Modern Glassmorphism -->
+            <div class="card border-0 shadow-lg rounded-4 mb-5">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <h5 class="fw-bold mb-0">Kirish parolini o'zgartirish</h5>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_type" value="change_password">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-lock me-1 text-muted"></i>  Joriy parol
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-key text-muted"></i>
+                                    </span>
+                                    <input type="password" name="old_password" class="form-control border-start-0 ps-0" 
+                                            required style="border-left: none;">
+                                </div>
+                                <div class="form-text">Hozirgi parolingizni kiriting</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-shield-alt me-1 text-muted"></i>  Yangi parol
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-key text-muted"></i>
+                                    </span>
+                                    <input type="password" name="new_password" class="form-control border-start-0 ps-0" 
+                                            required style="border-left: none;">
+                                </div>
+                                <div class="form-text">Kamida 8 ta belgidan iborat bo'lishi kerak</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm">
+                                <i class="fas fa-sync-alt me-2"></i>  Parolni yangilash
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4 pt-2">
+                        <a href="{% url 'update-master-password' %}" class="text-decoration-none">
+                            <i class="fas fa-fingerprint me-1"></i>  Master Passwordni o'zgartirish
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- DANGER ZONE - Modern Redesign -->
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <h5 class="fw-bold text-danger mb-0">Xavfli zona</h5>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-danger bg-danger bg-opacity-10 border-0 rounded-3 mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Hisobni o'chirish barcha ma'lumotlaringizni butunlay yo'q qiladi. Bu jarayon qaytarilmaydi.
+                    </div>
+                    <button class="btn btn-outline-danger w-100 rounded-pill py-2" data-toggle="modal" data-target="#deleteModal">
+                        <i class="fas fa-trash-alt me-2"></i> Hisobni butunlay o'chirish
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content rounded-4" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="post_type" value="delete">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                    Hisobni o'chirish
+                </h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">X</button>
+            </div>
+            <div class="modal-body">
+                <p>Siz <strong class="text-danger">{{ request.user.username }}</strong> foydalanuvchi hisobini o'chirmoqchisiz.</p>
+                <p class="text-muted">Bu amalni bekor qilib bo'lmaydi. Barcha ma'lumotlaringiz butunlay yo'q qilinadi.</p>
+                <label for="confirm_text">
+                    O'chirish uchun ushbu qo'shtirnoq ichidagi matnni yozing:<br>
+                    <span style="color: rgb(234, 40, 40);">"Mening {{ request.user.username }} nomli hisobim o'chirilsin."</span>
+                </label>
+                <input type="text" id="confirm_text" class="form-control" name="confirm_text">
+                <div class="form-check mt-3">
+                    
+                    <input class="form-check-input" type="checkbox" id="confirmDelete" name="confirm">
+                    <label class="form-check-label" for="confirmDelete">
+                        Hisobni o'chirishga roziman
+                    </label>
+                   
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-dismiss="modal">Bekor qilish</button>
+                <button type="submit" class="btn btn-danger rounded-pill px-4" id="confirmDeleteBtn" disabled>
+                    <i class="fas fa-trash me-1"></i>O'chirish
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="editUser">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form id="new-product-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="post_type" value="edit">
+        <div class="modal-body">
+          <div class="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded">
+            <div>
+                {% if request.user.photo and request.user.photo.url %}
+                    <img src="{{ request.user.photo.url }}" style="width: 60px; height: 40px; object-fit: cover; margin-right: 5px;" class="rounded">
+                {% else %}
+                    <img src="{% static 'user-solid-full.svg' %}" style="width: 60px; height: 40px; object-fit: cover; margin-right: 5px;" class="rounded">
+                {% endif %}
+            </div>
+            <div class="flex-grow-1">
+                <input type="text" class="form-control" value="{{ request.user.username }}" required name="username">
+            </div>
+          </div> 
+          <label for="photo">Photo:</label>
+          <input type="file" name="photo" id="photo" class="form-control">
+          <i>Photo hajmi 5mb dan kichik bo'lishi shart!</i>
+          <br>
+          <label for="first_name">Ism:</label>
+          <input type="text" id="first_name" class="form-control" value="{{ request.user.first_name|default:''}}" name="first_name">
+          <br>
+          <label for="last_name">Familiya:</label>
+          <input type="text" id="last_name" class="form-control" value="{{ request.user.last_name|default:''}}" name="last_name">
+          <br>
+          <label for="email">Email:</label>
+          <input type="text" id="email" class="form-control"
+            required value="{{ request.user.email }}" name="email">
+          <br>
+          
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Saqlash</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Bekor qilish</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+<style>
+    /* Custom animations and transitions */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    }
+    
+    .form-control, .input-group-text {
+        transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .input-group-text:focus {
+        box-shadow: none;
+        border-color: #667eea;
+    }
+    
+    .input-group-text {
+        background-color: #f8f9fa;
+    }
+    
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    
+    @media (max-width: 768px) {
+        .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Modal checkbox functionality
+    const checkbox = document.getElementById('confirmDelete');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    
+    if (checkbox && confirmBtn) {
+        checkbox.addEventListener('change', function() {
+            confirmBtn.disabled = !this.checked;
+        });
+    }
+</script>
+
+{% endblock %}
