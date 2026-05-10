@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from main.views import *
 from django.urls import re_path
+from django.views.static import serve
 
 urlpatterns = [
     path('kjeshfkajh4aajfalajsdfjkj1546asf41dfs/', admin.site.urls),
