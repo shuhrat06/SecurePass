@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xkm6(bo^rm7rbwxo3%o16i2#+4*39to@9&6&c@uk-f4gd$c5r8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -140,16 +140,21 @@ GOOGLE_SSO_AUTO_CREATE_USERS = False
 GOOGLE_SSO_NEXT_URL = 'google-sso-check'
 GOOGLE_SSO_LOGIN_FAILED_URL = 'google-sso-check'
 
-
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6380/1',  # 1-database (ixtiyoriy)
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6380/1',  # 1-database (ixtiyoriy)
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         }
+#     }
+# }
 RATELIMIT_VIEW = 'main.auth_views.RateLimitView'
 
 MULTI_CAPTCHA_ADMIN = {
