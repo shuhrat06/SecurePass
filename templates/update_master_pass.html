@@ -271,7 +271,7 @@
   <div class="login-box">
     <div class="back-link">
       <i class="fa-solid fa-house"></i>
-      <a href="{% url 'user-home' %}">Asosiy sahifa</a>
+      <a href="{% url 'home' %}">Asosiy sahifa</a>
     </div>
     <h2> {{header}} </h2>
     <form method="post">
@@ -284,7 +284,7 @@
         <label for="password">Yangi Master Password:</label>
         <input type="password" id="password" name="master_password" required>
       </div>
-      <button type="submit">kirish</button>
+      <button type="submit">Yuborish</button>
     </form>
   </div>
   {% if messages %}

@@ -12,6 +12,7 @@ from django_ratelimit.decorators import ratelimit
 from .forms import CaptchaForm
 from main.functions import send_email, generate_password
 from random import randint
+from django.conf import settings
 
 # from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -216,12 +217,17 @@ class MasterPasswordView(LoginRequiredMixin, View):
             messages.error(request, "Parol uzunligi kamida 8ta belgi bo'lishi va belgilar qaytarilishi 50 % dan kam bo'lishi shart!")
             return self.get(request)
         
-        request.session['mp_type'] = 'C'
-        request.session['master_password'] = master_password
-        request.session['mp_confirm_sended'] = False
-        request.session['mp_confirm_try'] = 0
-
-        return redirect('master-password-confirm')
+        if settings.SMS_SERVICE_WORKING:
+            request.session['mp_type'] = 'C'
+            request.session['master_password'] = master_password
+            request.session['mp_confirm_sended'] = False
+            request.session['mp_confirm_try'] = 0
+            return redirect('master-password-confirm')
+        else:
+            user = request.user
+            user.set_master_password(master_password)
+            messages.success(request, "Master Password o'rnatildi!")
+            return redirect('user-home')
 
 class MasterPasswordConfirmView(LoginRequiredMixin, View):
     def get(self, request):
@@ -331,10 +337,21 @@ class UpdateMasterPassword(LoginRequiredMixin, View):
             return self.get(request)
         
         
-        
-        request.session['mp_type'] = 'U'
-        request.session['master_password'] = master_password
-        request.session['old_master_password'] = old_master_password
-        request.session['mp_confirm_sended'] = False
-        request.session['mp_confirm_try'] = 0
-        return redirect('master-password-confirm')
+        if settings.SMS_SERVICE_WORKING:
+            request.session['mp_type'] = 'U'
+            request.session['master_password'] = master_password
+            request.session['old_master_password'] = old_master_password
+            request.session['mp_confirm_sended'] = False
+            request.session['mp_confirm_try'] = 0
+            return redirect('master-password-confirm')
+        else:
+            user = request.user
+            user.set_master_password(master_password)
+            passwords = Password.objects.filter(user=user)
+            for password in passwords:
+                try:
+                    password.update_password(old_master_password, master_password)
+                except Exception as e:
+                    print(e)
+            messages.success(request, "Master Password yangilandi!")
+            return redirect('user-home')

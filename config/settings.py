@@ -164,3 +164,6 @@ MULTI_CAPTCHA_ADMIN = {
     'engine': 'recaptcha2',
 }
 CAPTCHA_LENGTH=6
+
+
+SMS_SERVICE_WORKING = False

@@ -4,6 +4,7 @@ import secrets
 import hashlib
 from django.utils import timezone
 
+
 class User(AbstractUser):
     photo = models.ImageField(upload_to='users_photo/', null=True, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
