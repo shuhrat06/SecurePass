@@ -186,7 +186,7 @@ def check_password(password):
     password_len = len(password)
     if password_len > 0:
         if len(set(password)) == 1:
-            n=100
+            n=0
         else:
             n = (len(set(password)) / password_len) * 100
     else:
