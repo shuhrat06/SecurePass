@@ -430,12 +430,10 @@ class UserInfoViev(LoginRequiredMixin, View):
 class UserMessagesView(LoginRequiredMixin, View):
     def get(self, request):
         msgs = Messages.objects.filter(Q(for_all=True) | Q(user=request.user)).order_by('viewed', '-id')
-        unread_count = msgs.filter(viewed=False).count()
         read_count = msgs.filter(viewed=True).count()
 
         context = {
             'msgs': msgs,
-            'unread_count': unread_count,
             'read_count': read_count,
         }
         return render(request, 'user_message.html', context)
